@@ -1,0 +1,20 @@
+application:
+  title: rate-limited-reactive-notification-service
+  version: 1.0.0-SNAPSHOT
+
+server:
+  servlet:
+    context-path: /notification-service/api
+  port: 8081
+
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  application:
+    name: ${application.title}
+  webflux:
+    base-path: /notification-service/api
+  web:
+    locale: en
