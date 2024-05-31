@@ -47,6 +47,7 @@ jobs:
     #   run: gradle build
 
   coverage:
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -60,7 +61,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Run Jacoco with Gradle Wrapper
-        run: ./gradlew jacocoTestCoverageVerificatio
+        run: ./gradlew jacocoTestCoverageVerification
 
   dependency-submission:
 
