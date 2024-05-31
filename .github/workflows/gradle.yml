@@ -46,6 +46,22 @@ jobs:
     # - name: Build with Gradle 8.5
     #   run: gradle build
 
+  coverage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'}
+
+      - name: Run Jacoco with Gradle Wrapper
+        run: ./gradlew jacocoTestCoverageVerificatio
+
   dependency-submission:
 
     runs-on: ubuntu-latest
