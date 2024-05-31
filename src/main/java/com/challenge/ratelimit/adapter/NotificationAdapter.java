@@ -23,7 +23,7 @@ public class NotificationAdapter {
 
     public NotificationEntry toEntry(final Notification notification) {
         return NotificationEntry.builder()
-                .id(UUID.randomUUID())
+                .id(notification.id())
                 .userId(notification.userId())
                 .notificationType(notification.type())
                 .content(notification.content())

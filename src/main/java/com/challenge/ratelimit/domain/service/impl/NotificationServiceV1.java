@@ -40,7 +40,7 @@ public class NotificationServiceV1 implements NotificationService {
     }
 
     private Mono<Boolean> isAllowed(final Notification notification, final Mono<RateLimitConfig> rateLimitConfigMono) {
-        return notificationRepository.countByRecipientAndType(notification.userId(), notification.type())
+        return notificationRepository.countByUserIdAndType(notification.userId(), notification.type())
                 .zipWith(rateLimitConfigMono)
                 .filter(tuple -> tuple.getT1() < tuple.getT2().maxCount())
                 .hasElement()

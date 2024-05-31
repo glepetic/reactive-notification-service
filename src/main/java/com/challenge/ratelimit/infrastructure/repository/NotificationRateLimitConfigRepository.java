@@ -27,7 +27,7 @@ public class NotificationRateLimitConfigRepository implements RateLimitConfigura
 
     @Override
     public Mono<RateLimitConfig> getRateLimitConfig(final NotificationType type) {
-        return Mono.just(type)
+        return Mono.justOrEmpty(type)
                 .mapNotNull(configMap::get)
                 .map(rateLimitAdapter::toModel);
     }

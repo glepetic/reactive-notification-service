@@ -25,7 +25,7 @@ public class NotificationRedisRepository implements NotificationRepository {
     private final NotificationAdapter notificationAdapter;
 
     @Override
-    public Mono<Long> countByRecipientAndType(final UUID userId, final NotificationType type) {
+    public Mono<Long> countByUserIdAndType(final UUID userId, final NotificationType type) {
         return Mono.fromSupplier(() -> buildKey(userId, type, "*"))
                 .flatMapMany(redisTemplate::keys)
                 .count()

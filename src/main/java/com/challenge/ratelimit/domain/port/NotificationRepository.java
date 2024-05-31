@@ -8,6 +8,6 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 public interface NotificationRepository {
-    Mono<Long> countByRecipientAndType(final UUID userId, final NotificationType type);
+    Mono<Long> countByUserIdAndType(final UUID userId, final NotificationType type);
     Mono<Notification> save(final Notification notification, final Mono<RateLimitConfig> rateLimitConfigMono);
 }

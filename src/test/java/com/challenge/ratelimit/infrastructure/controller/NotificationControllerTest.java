@@ -9,11 +9,10 @@ import com.challenge.ratelimit.infrastructure.dto.http.inbound.ErrorResponse;
 import com.challenge.ratelimit.infrastructure.dto.http.inbound.NotificationRequest;
 import com.challenge.ratelimit.infrastructure.dto.http.inbound.NotificationResult;
 import com.challenge.ratelimit.infrastructure.dto.http.inbound.NotificationResultResponse;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 @WebFluxTest(controllers = NotificationController.class)
 public class NotificationControllerTest {
 
@@ -38,18 +38,6 @@ public class NotificationControllerTest {
     private NotificationService notificationServiceMock;
     @MockBean
     private NotificationAdapter notificationAdapterMock;
-
-    private AutoCloseable mocks;
-
-    @BeforeEach
-    public void setup() {
-        mocks = MockitoAnnotations.openMocks(NotificationControllerTest.class);
-    }
-
-    @AfterEach
-    public void teardown() throws Exception {
-        mocks.close();
-    }
 
     @Test
     @DisplayName("TEST sendNotification WHEN body is correct THEN expect 202 Accepted")

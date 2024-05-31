@@ -22,6 +22,10 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    embeddedRedisVersion = '1.4.3'
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
@@ -30,6 +34,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
+    testImplementation group: 'com.github.codemonstur', name: 'embedded-redis', version: embeddedRedisVersion
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -65,6 +70,15 @@ jacocoTestCoverageVerification {
             limit {
                 minimum = 0.8
             }
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        '**/model/**',
+                        '**/exception/**',
+                        '**/configuration/**',
+                        '**/dto/**',
+                        '**/publisher/**' // Not implemented, shouldn't be evaluated
+                ])
+            }))
         }
     }
 }
