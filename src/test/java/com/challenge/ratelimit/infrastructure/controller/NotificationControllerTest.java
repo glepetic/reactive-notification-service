@@ -35,9 +35,9 @@ public class NotificationControllerTest {
     private WebTestClient webTestClient;
 
     @MockBean
-    private NotificationService notificationService;
+    private NotificationService notificationServiceMock;
     @MockBean
-    private NotificationAdapter notificationAdapter;
+    private NotificationAdapter notificationAdapterMock;
 
     private AutoCloseable mocks;
 
@@ -62,11 +62,11 @@ public class NotificationControllerTest {
         NotificationRequest request = new NotificationRequest(type.name(), userId.toString(), content);
         Notification notification = new Notification(UUID.randomUUID(), userId, type, content);
         NotificationResultResponse expected = new NotificationResultResponse(UUID.randomUUID(), NotificationResult.OK);
-        when(notificationAdapter.toModel(request))
+        when(notificationAdapterMock.toModel(request))
                 .thenReturn(notification);
-        when(notificationService.sendNotification(notification))
+        when(notificationServiceMock.sendNotification(notification))
                 .thenReturn(Mono.just(notification));
-        when(notificationAdapter.toResultResponse(notification))
+        when(notificationAdapterMock.toResultResponse(notification))
                 .thenReturn(expected);
 
         // Act
@@ -94,9 +94,9 @@ public class NotificationControllerTest {
         Notification notification = new Notification(UUID.randomUUID(), userId, type, content);
         String expectedErrorMessage = String.format("Cannot send more notifications of type %s to user %s at this time",
                 type, userId);
-        when(notificationAdapter.toModel(request))
+        when(notificationAdapterMock.toModel(request))
                 .thenReturn(notification);
-        when(notificationService.sendNotification(notification))
+        when(notificationServiceMock.sendNotification(notification))
                 .thenReturn(Mono.error(new NotificationRejectedException(userId, type)));
 
         // Act
@@ -270,9 +270,9 @@ public class NotificationControllerTest {
         NotificationRequest request = new NotificationRequest(type.name(), userId.toString(), content);
         Notification notification = new Notification(UUID.randomUUID(), userId, type, content);
         String expectedErrorMessage = "oops, something bad happened";
-        when(notificationAdapter.toModel(request))
+        when(notificationAdapterMock.toModel(request))
                 .thenReturn(notification);
-        when(notificationService.sendNotification(notification))
+        when(notificationServiceMock.sendNotification(notification))
                 .thenReturn(Mono.error(new RuntimeException(expectedErrorMessage)));
 
         // Act
