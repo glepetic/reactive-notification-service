@@ -57,7 +57,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '21'
-          distribution: 'temurin'}
+          distribution: 'temurin'
 
       - name: Run Jacoco with Gradle Wrapper
         run: ./gradlew jacocoTestCoverageVerificatio
