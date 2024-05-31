@@ -40,7 +40,7 @@ public class ExceptionController {
                 .map(fieldError -> String.format(errorTemplate, fieldError.getField(), fieldError.getRejectedValue(),
                         fieldError.getCode(), fieldError.getDefaultMessage()))
                 .toList();
-        return buildResponse(HttpStatus.BAD_REQUEST, "Validation error", errors);
+        return buildResponse(HttpStatus.BAD_REQUEST, "Validation failed", errors);
     }
 
     @ExceptionHandler(UnsupportedMediaTypeStatusException.class)
@@ -66,7 +66,7 @@ public class ExceptionController {
     }
 
     private Mono<ResponseEntity<ErrorResponse>> buildForbidden(Exception e) {
-        return buildResponse(HttpStatus.FORBIDDEN, "Forbidden", Collections.singletonList("Forbidden"))
+        return buildResponse(HttpStatus.FORBIDDEN, "Forbidden", null)
                 .doOnNext(response -> log.warn("Forbbiden access - Ex is {} with message: {}", e.getClass().getName(), e.getMessage()));
     }
 
