@@ -23,6 +23,7 @@ repositories {
 }
 
 ext {
+    openApiVersion = '2.5.0'
     embeddedRedisVersion = '1.4.3'
 }
 
@@ -30,6 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webflux-ui', version: openApiVersion
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

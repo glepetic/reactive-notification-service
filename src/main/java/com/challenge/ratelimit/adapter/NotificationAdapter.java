@@ -8,6 +8,7 @@ import com.challenge.ratelimit.infrastructure.dto.http.inbound.NotificationResul
 import com.challenge.ratelimit.infrastructure.dto.redis.NotificationEntry;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.UUID;
 
 @Component
@@ -21,12 +22,14 @@ public class NotificationAdapter {
         );
     }
 
-    public NotificationEntry toEntry(final Notification notification) {
+    public NotificationEntry buildEntry(final Notification notification,
+                                        final Duration expiration) {
         return NotificationEntry.builder()
                 .id(notification.id())
                 .userId(notification.userId())
                 .notificationType(notification.type())
                 .content(notification.content())
+                .expiration(expiration)
                 .build();
     }
 

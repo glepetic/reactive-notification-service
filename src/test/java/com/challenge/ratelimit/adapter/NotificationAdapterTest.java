@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Duration;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,8 +45,8 @@ public class NotificationAdapterTest {
     }
 
     @Test
-    @DisplayName("TEST toEntry WHEN model with non-null values is received THEN return notification entry")
-    public void toEntryTest1() {
+    @DisplayName("TEST buildEntry WHEN model with non-null values is received THEN return notification entry")
+    public void buildEntryTest1() {
 
         // Assemble
         UUID expectedId = UUID.randomUUID();
@@ -55,7 +56,8 @@ public class NotificationAdapterTest {
 
         // Act
         NotificationEntry notificationEntry =
-                notificationAdapter.toEntry(new Notification(expectedId, expectedUserId, expectedType, expectedContent));
+                notificationAdapter.buildEntry(new Notification(expectedId, expectedUserId, expectedType, expectedContent),
+                        Duration.ZERO);
 
         // Assert
         assertEquals(expectedId, notificationEntry.id());

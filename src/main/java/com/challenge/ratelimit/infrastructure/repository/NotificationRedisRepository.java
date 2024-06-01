@@ -34,12 +34,13 @@ public class NotificationRedisRepository implements NotificationRepository {
 
     @Override
     public Mono<Notification> save(final Notification notification, final Mono<RateLimitConfig> rateLimitConfigMono) {
-        return Mono.just(notification)
-                .map(notificationAdapter::toEntry)
-                .zipWith(rateLimitConfigMono)
-                .flatMap(tuple -> redisTemplate.opsForValue()
-                        .set(buildKey(tuple.getT1().userId(), tuple.getT1().notificationType(), tuple.getT1().id().toString()), tuple.getT1(),
-                                tuple.getT2().rate()))
+        return rateLimitConfigMono
+                .map(config -> notificationAdapter.buildEntry(notification, config.rate()))
+                .flatMap(entry -> redisTemplate.opsForValue().set(
+                        buildKey(entry.userId(), entry.notificationType(), entry.id().toString()),
+                        entry,
+                        entry.expiration())
+                )
                 .thenReturn(notification);
     }
 

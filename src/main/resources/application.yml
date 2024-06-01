@@ -1,5 +1,7 @@
 application:
   title: rate-limited-reactive-notification-service
+  pretty-title: Reactive Notification Service with Redis Rate Limiter
+  description: Demo project for interview challenge
   version: 1.0.0-SNAPSHOT
 
 server:

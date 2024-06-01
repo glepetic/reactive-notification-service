@@ -23,7 +23,7 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -104,14 +104,15 @@ public class NotificationRedisRepositoryTest {
         String content = "content";
         Notification notification = new Notification(notificationId, userId, type, content);
         String entryKey = "notification:" + userId + ":" + type + ":" + notificationId;
-        NotificationEntry entry = new NotificationEntry(notificationId, userId, type, content);
-        Mono<RateLimitConfig> configMono = Mono.just(new RateLimitConfig(1, Duration.ofSeconds(10)));
+        Duration expiration = Duration.ofSeconds(10);
+        NotificationEntry entry = new NotificationEntry(notificationId, userId, type, content, expiration);
+        Mono<RateLimitConfig> configMono = Mono.just(new RateLimitConfig(1, expiration));
 
-        when(notificationAdapterMock.toEntry(notification))
+        when(notificationAdapterMock.buildEntry(notification, expiration))
                 .thenReturn(entry);
         when(redisTemplateMock.opsForValue())
                 .thenReturn(reactiveValueOperationsMock);
-        when(reactiveValueOperationsMock.set(eq(entryKey), eq(entry), any(Duration.class)))
+        when(reactiveValueOperationsMock.set(entryKey, entry, expiration))
                 .thenReturn(Mono.just(true));
 
 
@@ -122,6 +123,9 @@ public class NotificationRedisRepositoryTest {
         StepVerifier.create(result)
                 .expectNext(notification)
                 .verifyComplete();
+
+        verify(reactiveValueOperationsMock, times(1))
+                .set(any(), any(), any());
 
     }
 

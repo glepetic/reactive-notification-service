@@ -41,12 +41,15 @@ public class NotificationServiceV1 implements NotificationService {
 
     private Mono<Boolean> isAllowed(final Notification notification, final Mono<RateLimitConfig> rateLimitConfigMono) {
         return notificationRepository.countByUserIdAndType(notification.userId(), notification.type())
-                .zipWith(rateLimitConfigMono)
-                .filter(tuple -> tuple.getT1() < tuple.getT2().maxCount())
+                .filterWhen(count -> compareCountToConfig(count, rateLimitConfigMono))
                 .hasElement()
                 .doOnError(err -> log.error("Encountered error while checking notification count: {}", err.getMessage()))
                 // TODO: define what to do on error (allow, reject, retry, etc.)
                 .onErrorResume(e -> Mono.just(false));
+    }
+
+    private Mono<Boolean> compareCountToConfig(final Long count, final Mono<RateLimitConfig> rateLimitConfigMono) {
+        return rateLimitConfigMono.map(config -> count < config.maxCount());
     }
 
     private Mono<RateLimitConfig> getRateLimitConfig(final NotificationType type) {
