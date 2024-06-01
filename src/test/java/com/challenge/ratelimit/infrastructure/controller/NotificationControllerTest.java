@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
@@ -27,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
+@ActiveProfiles(value = "test")
 @ExtendWith(MockitoExtension.class)
 @WebFluxTest(controllers = NotificationController.class)
 public class NotificationControllerTest {
@@ -80,7 +82,7 @@ public class NotificationControllerTest {
         NotificationType type = NotificationType.STATUS;
         NotificationRequest request = new NotificationRequest(type.name(), userId.toString(), content);
         Notification notification = new Notification(UUID.randomUUID(), userId, type, content);
-        String expectedErrorMessage = String.format("Cannot send more notifications of type %s to user %s at this time",
+        String expectedErrorMessage = String.format("Cannot send notifications of type %s to user %s at this time",
                 type, userId);
         when(notificationAdapterMock.toModel(request))
                 .thenReturn(notification);

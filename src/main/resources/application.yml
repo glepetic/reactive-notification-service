@@ -5,13 +5,13 @@ application:
 server:
   servlet:
     context-path: /notification-service/api
-  port: 8081
+  port: ${APPLICATION_PORT}
 
 spring:
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${SPRING_REDIS_HOST}
+      port: ${SPRING_REDIS_PORT}
   application:
     name: ${application.title}
   webflux:

@@ -46,7 +46,7 @@ public class NotificationServiceV1 implements NotificationService {
                 .hasElement()
                 .doOnError(err -> log.error("Encountered error while checking notification count: {}", err.getMessage()))
                 // TODO: define what to do on error (allow, reject, retry, etc.)
-                .onErrorResume(e -> Mono.just(true));
+                .onErrorResume(e -> Mono.just(false));
     }
 
     private Mono<RateLimitConfig> getRateLimitConfig(final NotificationType type) {

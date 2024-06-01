@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  redis:
+    image: 'redis:latest'
+    ports:
+      - "6379:6379"
+  notification-service:
+    environment:
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - APPLICATION_PORT=8081
+    build: .
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
